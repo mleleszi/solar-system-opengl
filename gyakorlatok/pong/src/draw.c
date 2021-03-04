@@ -1,4 +1,5 @@
 #include "draw.h"
+#include "game.h"
 
 #include "GL/glut.h"
 
@@ -31,6 +32,15 @@ void draw_game(Game* game)
     x2 = game->width;
     y1 = game->right_pad.position;
     y2 = y1 + game->right_pad.size;
+
+    //Display score
+    /**
+    glRasterPos2i(270, 20);
+    glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+    char output[10];
+    sprintf(output, "Score: %d - %d", game->score_left, game->score_right);
+    glutBitmapString(GLUT_BITMAP_HELVETICA_18, output);
+    */
 
     glBegin(GL_QUADS);
 

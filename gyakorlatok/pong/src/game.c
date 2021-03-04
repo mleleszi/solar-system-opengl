@@ -16,7 +16,7 @@ void restart_game(Game* game)
 
     center_x = game->width / 2;
     center_y = game->height / 2;
-
+  
     move_pad(&(game->left_pad), center_y, game->height);
     move_pad(&(game->right_pad), center_y, game->height);
     start_ball(&(game->ball), center_x, center_y);
@@ -43,6 +43,8 @@ void update_game(Game* game, double time)
         game->ball.y = game->height - game->ball.radius;
         game->ball.speed_y *= -1;
     }
+
+
 }
 
 void move_left_pad(Game* game, float position)

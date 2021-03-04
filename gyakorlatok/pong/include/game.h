@@ -14,6 +14,8 @@ typedef struct Game
     Pad right_pad;
     int width;
     int height;
+    //int score_left;
+    //int score_right;
 } Game;
 
 /**
