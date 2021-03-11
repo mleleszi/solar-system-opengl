@@ -43,27 +43,36 @@ void reshape(GLsizei width, GLsizei height)
 
 void motion(int x, int y)
 {
-    // rotate_camera(&camera, x, y);
+    //rotate_camera(&camera, x, y);
     glutPostRedisplay();
 }
 
 void keyboard(unsigned char key, int x, int y)
 {
     float position;
+    const float speed = 1.0;
+    const float rotation_speed  = 30.0;
 
     switch (key) {
     case 'w':
-        set_camera_speed(&camera, 0.1);
+        set_camera_speed(&camera, speed);
         break;
     case 's':
-        set_camera_speed(&camera, -0.1);
+        set_camera_speed(&camera, -speed);
         break;
     case 'a':
-        set_camera_side_speed(&camera, 0.1);
+        set_camera_side_speed(&camera, speed);
         break;
     case 'd':
-        set_camera_side_speed(&camera, -0.1);
+        set_camera_side_speed(&camera, -speed);
         break;
+    case 'j':
+        set_camera_horizontal_rotation_speed(&camera, rotation_speed);
+        break;
+    case 'l':
+        set_camera_horizontal_rotation_speed(&camera, -rotation_speed);
+        break;
+
     }
 
     glutPostRedisplay();
@@ -82,6 +91,10 @@ void keyboard_up(unsigned char key, int x, int y)
     case 'd':
         set_camera_side_speed(&camera, 0.0);
         break;
+    case 'j':
+    case 'l':
+        set_camera_horizontal_rotation_speed(&camera, 0.0);
+        break;
     }
 
     glutPostRedisplay();
@@ -92,13 +105,13 @@ void idle()
     static int last_frame_time = 0;
     int current_time;
     double elapsed_time;
-   
+
     current_time = glutGet(GLUT_ELAPSED_TIME);
     elapsed_time = (double)(current_time - last_frame_time) / 1000;
     last_frame_time = current_time;
 
     update_camera(&camera, elapsed_time);
+    update_scene(&scene, elapsed_time);
 
     glutPostRedisplay();
 }
-
