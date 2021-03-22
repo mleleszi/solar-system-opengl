@@ -1,6 +1,6 @@
 #include "callbacks.h"
 
-#define VIEWPORT_RATIO (4.0 / 3.0)
+#define VIEWPORT_RATIO (16.0 / 9.0)
 #define VIEWPORT_ASPECT 50.0
 
 struct {
@@ -8,44 +8,64 @@ struct {
     int y;
 } mouse_position;
 
+float earth_rotation = 0.0f;
+float moon_rotation = 0.0f;
+
+void update(double time){
+    earth_rotation += 20.0 * time;
+    moon_rotation += 60.0 * time;
+}
+
 void display(){
+
+
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
 
-    glPushMatrix();
-    set_view(&camera);
 
-    glutSolidSphere(3.0, 15, 15);
+
+
+    glPushMatrix();
+
+        set_view(&camera);
+
+        // sun
+        glColor3f(1.0f, 1.0f, 0.0);
+        glutSolidSphere(3.0f, 15, 15);
+
+
+        // earth
+        glColor3f(0.0f, 1.0f, 0.0f);
+        glRotatef(earth_rotation, 0.0f, 0.0f, 1.0f);
+        glTranslatef(10.0f, 0.0f, 0.0f);
+        //glRotatef(rotation, 0.0f, 0.0f, 1.0f); forgas?
+        glutSolidSphere(1.0f, 15, 15);
+
+        // motion
+        glColor3f(0.0f, 0.0f, 1.0f);
+        glRotatef(moon_rotation, 0.0f, 0.0f, 1.0f);
+        glTranslatef(1.5f, 0.0f, 0.0f);
+        glutSolidSphere(0.3f, 15, 15);
+
 
     glPopMatrix();
+
 
     glutSwapBuffers();
 }
 
 void reshape(GLsizei width, GLsizei height){
+    if (height == 0)
+		height = 1;
 
-    int x, y, w, h;
-    double ratio;
+	float ratio =  width * 1.0 / height;
 
-    ratio = (double)width / height;
-    if (ratio > VIEWPORT_RATIO) {
-        w = (int)((double)height * VIEWPORT_RATIO);
-        h = height;
-        x = (width - w) / 2;
-        y = 0;
-    }
-    else {
-        w = width;
-        h = (int)((double)width / VIEWPORT_RATIO);
-        x = 0;
-        y = (height - h) / 2;
-    }
-
-    glViewport(x, y, w, h);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(VIEWPORT_ASPECT, VIEWPORT_RATIO, 0.01, 10000.0);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glViewport(0, 0, width, height);
+	gluPerspective(45.0f, ratio, 0.1f, 100.0f);
+	glMatrixMode(GL_MODELVIEW);
 }
 
 void mouse(int button, int state, int x, int y){
@@ -75,11 +95,14 @@ void keyboard(unsigned char key, int x, int y){
     case 'd':
         set_camera_side_speed(&camera, -1);
         break;
-    case 'i':
+    case 32:
         set_camera_vertical_speed(&camera, 1);
         break;
-    case 'k':
+    case 'c':
         set_camera_vertical_speed(&camera, -1);
+        break;
+    case 27:
+        exit(0);
         break;
     }
 
@@ -97,8 +120,8 @@ void keyboard_up(unsigned char key, int x, int y)
     case 'd':
         set_camera_side_speed(&camera, 0.0);
         break;
-    case 'i':
-    case 'k':
+    case 32:
+    case 'c':
         set_camera_vertical_speed(&camera, 0.0);
         break;
     }
@@ -117,6 +140,7 @@ void idle()
     last_frame_time = current_time;
 
     update_camera(&camera, elapsed_time);
+    update(elapsed_time);
 
     glutPostRedisplay();
 }
