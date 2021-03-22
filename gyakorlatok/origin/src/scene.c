@@ -29,9 +29,9 @@ void draw_scene(const Scene* scene)
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(0, 0, 2);
+    //glTranslatef(0, 0, 2);
     glRotatef(scene->teapot_rotation, 0, 1, 0);
-
+    glTranslatef(0, 0, 2);
     glutWireTeapot(1);
     glPopMatrix();
 

@@ -70,6 +70,17 @@ void display(){
     glEnable(GL_LIGHTING);
     glPopMatrix();
 
+    // Moon
+    createCircle(5.0);
+    glPushMatrix();
+    glTranslatef(5.0 * cos(rotationSpeed02 / 0.25), 0.0, 5.0 * sin(rotationSpeed02 / 0.25));
+    glRotatef(0.0f, 1.0f, 0.0f, 0.0);
+    glDisable(GL_LIGHTING);
+    glColor3f(0.0f, 0.5f, 0.9f);
+    glutSolidSphere(3.5, 15, 15);
+    glEnable(GL_LIGHTING);
+    glPopMatrix();
+
     glutSwapBuffers();
 
 }
@@ -99,7 +110,8 @@ void keyboard(unsigned char key, int x, int y){
 }
 
 void spinning(){
-    rotationSpeed += 0.0006;
+
+    rotationSpeed += 0.001;
     rotationSpeed01 += 0.0004;
     rotationSpeed02 += 0.0002;
     rotationSpeed03 += 0.0001;
