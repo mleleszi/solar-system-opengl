@@ -11,12 +11,15 @@ typedef struct Scene
     Model cube;
     Material material;
     GLuint texture_id;
+    float rotation;
 } Scene;
 
 /**
  * Initialize the scene by loading models.
  */
 void init_scene(Scene* scene);
+
+void update_scene(Scene* scene, double time);
 
 /**
  * Set the lighting of the scene.

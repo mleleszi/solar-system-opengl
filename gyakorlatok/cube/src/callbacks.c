@@ -15,11 +15,20 @@ void display()
 
     glPushMatrix();
     set_view(&camera);
+
+    glPushMatrix();
+    /*
+    glRotatef(scene.rotation, 0, 0, 1);
+    glTranslatef(10.0, 0.0, 0.0);
+    glScalef(0.5, 0.5, 0.5);
+    glRotatef(scene.rotation, 0, 0, 1);
+    */
     draw_scene(&scene);
+    
     glPopMatrix();
 
     if (is_preview_visible) {
-        show_texture_preview();
+        //show_texture_preview();
     }
 
     glutSwapBuffers();
@@ -113,12 +122,12 @@ void idle()
     static int last_frame_time = 0;
     int current_time;
     double elapsed_time;
-   
+
     current_time = glutGet(GLUT_ELAPSED_TIME);
     elapsed_time = (double)(current_time - last_frame_time) / 1000;
     last_frame_time = current_time;
 
     update_camera(&camera, elapsed_time);
-
+    update_scene(&scene, elapsed_time);
     glutPostRedisplay();
 }
