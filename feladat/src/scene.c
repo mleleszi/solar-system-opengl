@@ -89,6 +89,7 @@ void set_material(const Material* material){
     glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &(material->shininess));
 }
 
+
 Planet sun = {6.0f/10, 0.0f/10, 0.0f, 0.0f, 20.0f, 30.0f, 0.0f};
 Planet mercury = {0.4f/10, 8.0f/10, 40.0f, 0.0f, 20.0f, 0.0f, 0.0f};
 Planet venus = {0.95f/10, 16.0f/10, 30.0f, 0.0f, 10.0f, 0.0f, -177.3f};

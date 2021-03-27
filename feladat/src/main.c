@@ -1,6 +1,7 @@
 #include <GL/glut.h>
 #include <stdio.h>
 #include "callbacks.h"
+#include "popupmenu.h"
 #include "init.h"
 
 // register callbacks
@@ -31,6 +32,8 @@ int main(int argc, char* argv[]){
     init_scene(&scene);
     init_camera(&camera);
     set_callbacks();
+
+    create_popup_menus();
 
     glutMainLoop();
 
