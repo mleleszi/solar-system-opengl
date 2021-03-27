@@ -13,7 +13,12 @@ void init_scene(Scene* scene)
     scene->rotation = 0.0;
     load_model(&(scene->cube), "models/moon.obj");
     scene->texture_id = load_texture("textures/moon.png");
-
+    scene->texture_id1 = load_texture("textures/moon.png");
+    scene->texture_id2 = load_texture("textures/moon.png");
+    scene->texture_id3 = load_texture("textures/moon.png");
+    scene->texture_id4 = load_texture("textures/moon.png");
+    scene->texture_id5 = load_texture("textures/moon.png");
+    scene->texture_id6 = load_texture("textures/moon.png");
 
     scene->material.ambient.red = 1.0;
     scene->material.ambient.green = 1.0;

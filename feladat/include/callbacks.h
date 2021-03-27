@@ -3,9 +3,13 @@
 
 #include <GL/glut.h>
 #include "camera.h"
+#include "scene.h"
 
 // camera
 Camera camera;
+
+// scene
+Scene scene;
 
 // called when graphical content needs to be displayed
 void display();

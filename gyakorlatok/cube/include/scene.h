@@ -11,6 +11,13 @@ typedef struct Scene
     Model cube;
     Material material;
     GLuint texture_id;
+    GLuint texture_id1;
+    GLuint texture_id2;
+    GLuint texture_id3;
+    GLuint texture_id4;
+    GLuint texture_id5;
+    GLuint texture_id6;
+
     float rotation;
 } Scene;
 

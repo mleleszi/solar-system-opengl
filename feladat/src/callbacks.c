@@ -9,7 +9,7 @@ struct {
     int y;
 } mouse_position;
 
-int animate = 1;
+
 
 void display(){
 
@@ -20,7 +20,7 @@ void display(){
 
     glPushMatrix();
         set_view(&camera);
-        draw_planets();
+        draw_planets(&scene);
     glPopMatrix();
 
     glutSwapBuffers();
@@ -55,27 +55,48 @@ void keyboard(unsigned char key, int x, int y){
 
     switch (key) {
     case 'w':
-        set_camera_speed(&camera, 10);
+        set_camera_speed(&camera, 1);
         break;
     case 's':
-        set_camera_speed(&camera, -10);
+        set_camera_speed(&camera, -1);
         break;
     case 'a':
-        set_camera_side_speed(&camera, 10);
+        set_camera_side_speed(&camera, 1);
         break;
     case 'd':
-        set_camera_side_speed(&camera, -10);
+        set_camera_side_speed(&camera, -1);
         break;
     case 32:
-        set_camera_vertical_speed(&camera, 10);
+        set_camera_vertical_speed(&camera, 1);
         break;
     case 'c':
-        set_camera_vertical_speed(&camera, -10);
+        set_camera_vertical_speed(&camera, -1);
         break;
     case 'b':
-        if(animate) animate = 0;
-        else animate = 1;
+        if(scene.animate) scene.animate = 0;
+        else scene.animate = 1;
         break;
+    case 'n':
+        if(scene.drawOrbit) scene.drawOrbit = 0;
+        else scene.drawOrbit = 1;
+        break;
+
+    case 43: // +
+        if(scene.ambient.red <= 0.95f){
+            scene.ambient.red += 0.05;
+            scene.ambient.green += 0.05;
+            scene.ambient.blue += 0.05;
+        }
+        break;
+    case 45: // -
+        if(scene.ambient.red >= 0.05f){
+            scene.ambient.red -= 0.05;
+            scene.ambient.green -= 0.05;
+            scene.ambient.blue -= 0.05;
+        }
+        break;
+
+
 
     case 27:
         exit(0);
@@ -116,7 +137,7 @@ void idle()
     last_frame_time = current_time;
 
     update_camera(&camera, elapsed_time);
-    increment_orbit(elapsed_time);
+    if(scene.animate) increment_orbit(elapsed_time);
 
     glutPostRedisplay();
 }
