@@ -44,13 +44,16 @@ void set_lighting(Scene* scene);
 // set the current material
 void set_material(const Material* material);
 
-// draw the sccene objects
-//void draw_scene(Scene* scene);
-
 // call to draw the planets
 void draw_planets(Scene* scene);
 
 // call to draw orbit trail of a planet
 void draw_orbit_trail(float radius);
+
+// call to make planet orbit
+void increment_orbit(double time);
+
+// call to make planet rotate arount its axis
+void increment_rotation(double time);
 
 #endif

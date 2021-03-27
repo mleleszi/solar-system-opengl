@@ -137,7 +137,10 @@ void idle()
     last_frame_time = current_time;
 
     update_camera(&camera, elapsed_time);
-    if(scene.animate) increment_orbit(elapsed_time);
+    if(scene.animate){
+        increment_orbit(elapsed_time);
+        increment_rotation(elapsed_time);
+    }
 
     glutPostRedisplay();
 }
