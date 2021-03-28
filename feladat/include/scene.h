@@ -28,11 +28,13 @@ typedef struct Scene{
     GLuint saturn_texture_id;
     GLuint uranus_texture_id;
     GLuint neptune_texture_id;
+    GLuint pluto_texture_id;
     GLuint moon_texture_id;
     GLuint skybox_texture_id;
 
     int drawOrbit;
     int animate;
+    float animation_speed;
 } Scene;
 
 // init scene by loading models
@@ -51,9 +53,12 @@ void draw_planets(Scene* scene);
 void draw_orbit_trail(float radius);
 
 // call to make planet orbit
-void increment_orbit(double time);
+void increment_orbit(Scene* scene, double time);
 
 // call to make planet rotate arount its axis
-void increment_rotation(double time);
+void increment_rotation(Scene* scene, double time);
+
+// render bitmap string
+void renderBitmapString(float x, float y, float z, void *font, char *string);
 
 #endif

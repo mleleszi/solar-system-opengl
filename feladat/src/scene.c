@@ -9,7 +9,7 @@
 
 
 void init_scene(Scene* scene){
-    load_model(&(scene->geoid), "data/models/geoid2.obj");
+    load_model(&(scene->geoid), "data/models/planet.obj");// geoid - jo fps, geoid2 - jo texturazas planet- joooo
 
     scene->sun_texture_id = load_texture("data/textures/2k_sun.jpg");
 
@@ -22,6 +22,7 @@ void init_scene(Scene* scene){
     scene->saturn_texture_id = load_texture("data/textures/2k_saturn.jpg");
     scene->uranus_texture_id = load_texture("data/textures/2k_uranus.jpg");
     scene->neptune_texture_id = load_texture("data/textures/2k_neptune.jpg");
+    //scene->pluto_texture_id = load_texture("data/textures/2k_neptune.jpg");
     scene->moon_texture_id = load_texture("data/textures/2k_moon.jpg");
 
     scene->skybox_texture_id = load_texture("data/textures/skybox.png");
@@ -47,6 +48,7 @@ void init_scene(Scene* scene){
 
     scene->drawOrbit = 1;
     scene->animate = 1;
+    scene->animation_speed = 1.0;
 }
 
 void set_lighting(Scene* scene){
@@ -99,7 +101,8 @@ Planet jupiter = {3.0f/10, 38.0f/10, 8.0f, 0.0f, 400.0f, 0.0f, -3.1f};
 Planet saturn = {2.5f/10, 50.0f/10, 6.0f, 0.0f, 400.0f, 0.0f, -26.7f};
 Planet uranus = {1.9f/10, 60.0f/10, 4.0f, 0.0f, 600.0f, 0.0f, -97.8f};
 Planet neptune = {1.8f/10, 70.0f/10, 2.0f, 0.0f, 550.0f, 0.0f, -28.3f};
-Planet moon = {0.3f/10, 2.0f/10, 40.0f, 0.0f, 40.0f, 0.0f, 0.0f};
+Planet pluto = {0.3f/10, 80.0f/10, 1.5f, 0.0f, 550.0f, 0.0f, -120.f};
+Planet moon = {0.3f/10, 2.0f/10, 40.0f, 0.0f, 16.0f, 0.0f, 0.0f};
 
 void draw_planets(Scene* scene){
     set_material(&(scene->material));
@@ -109,7 +112,7 @@ void draw_planets(Scene* scene){
     // Skybox
     glPushMatrix();
         glBindTexture(GL_TEXTURE_2D, scene->skybox_texture_id);
-        glScalef(30, 30, 30);
+        glScalef(50, 50, 50);
         draw_model(&(scene->geoid));
     glPopMatrix();
 
@@ -146,7 +149,7 @@ void draw_planets(Scene* scene){
         draw_model(&(scene->geoid));
     glPopMatrix();
 
-    // Earth & Moon
+    // Earth
     glPushMatrix();
         if(scene->drawOrbit) draw_orbit_trail(earth.distance);
         glBindTexture(GL_TEXTURE_2D, scene->earth_texture_id);
@@ -156,8 +159,13 @@ void draw_planets(Scene* scene){
         glRotatef(earth.rotation, 0.0f, 0.0f, 1.0f);
         glScalef(earth.radius, earth.radius, earth.radius);
         draw_model(&(scene->geoid));
+    glPopMatrix();
 
-        // Moon
+    // Moon
+    glPushMatrix();
+        glRotatef(earth.orbit, 0.0f, 0.0f, 1.0f);
+        glTranslatef(earth.distance, 0.0f, 0.0f);
+        glRotatef(5.0f, 0.0f, 1.0f, 0.0f);
         if(scene->drawOrbit) draw_orbit_trail(moon.distance);
         glBindTexture(GL_TEXTURE_2D, scene->moon_texture_id);
         glRotatef(moon.orbit, 0.0f, 0.0f, 1.0f);
@@ -227,6 +235,22 @@ void draw_planets(Scene* scene){
         draw_model(&(scene->geoid));
     glPopMatrix();
 
+    // Pluto
+
+    /*
+    glPushMatrix();
+        if(scene->drawOrbit) draw_orbit_trail(pluto.distance);
+        glRotatef(100.0f, 0.0f, 1.0f, 0.0f);
+        glBindTexture(GL_TEXTURE_2D, scene->pluto_texture_id);
+        glRotatef(pluto.orbit, 0.0f, 0.0f, 1.0f);
+        glTranslatef(pluto.distance, 0.0f, 0.0f);
+        glRotatef(pluto.axis_tilt, 0.0f, 1.0f, 0.0f);
+        glRotatef(pluto.rotation, 0.0f, 0.0f, 1.0f);
+        glScalef(neptune.radius, neptune.radius, neptune.radius);
+        draw_model(&(scene->geoid));
+    glPopMatrix();
+    */
+
     glPopMatrix();
 }
 
@@ -246,27 +270,37 @@ void draw_orbit_trail(float radius){
 
 
 
-void increment_orbit(double time){
-    mercury.orbit += mercury.orbit_speed * time;
-    venus.orbit += venus.orbit_speed * time;
-    earth.orbit += earth.orbit_speed * time;
-    mars.orbit += mars.orbit_speed * time;
-    jupiter.orbit += jupiter.orbit_speed * time;
-    saturn.orbit += saturn.orbit_speed * time;
-    uranus.orbit += uranus.orbit_speed * time;
-    neptune.orbit += neptune.orbit_speed * time;
-    moon.orbit += moon.orbit_speed * time;
+void increment_orbit(Scene* scene, double time){
+    mercury.orbit += mercury.orbit_speed * scene->animation_speed * time;
+    venus.orbit += venus.orbit_speed * scene->animation_speed * time;
+    earth.orbit += earth.orbit_speed * scene->animation_speed * time;
+    mars.orbit += mars.orbit_speed * scene->animation_speed * time;
+    jupiter.orbit += jupiter.orbit_speed * scene->animation_speed * time;
+    saturn.orbit += saturn.orbit_speed * scene->animation_speed * time;
+    uranus.orbit += uranus.orbit_speed * scene->animation_speed * time;
+    neptune.orbit += neptune.orbit_speed * scene->animation_speed * time;
+    pluto.orbit += pluto.orbit_speed * scene->animation_speed * time;
+    moon.orbit += moon.orbit_speed * scene->animation_speed * time;
 }
 
-void increment_rotation(double time){
-    sun.rotation += sun.rotation_speed * time;
-    mercury.rotation += mercury.rotation_speed * time;
-    venus.rotation += venus.rotation_speed * time;
-    earth.rotation += earth.rotation_speed * time;
-    mars.rotation += mars.rotation_speed * time;
-    jupiter.rotation += jupiter.rotation_speed * time;
-    saturn.rotation += saturn.rotation_speed * time;
-    uranus.rotation += uranus.rotation_speed * time;
-    neptune.rotation += neptune.rotation_speed * time;
-    moon.rotation += moon.rotation_speed * time;
+void increment_rotation(Scene* scene, double time){
+    sun.rotation += sun.rotation_speed * scene->animation_speed * time;
+    mercury.rotation += mercury.rotation_speed * scene->animation_speed * time;
+    venus.rotation += venus.rotation_speed * scene->animation_speed * time;
+    earth.rotation += earth.rotation_speed * scene->animation_speed * time;
+    mars.rotation += mars.rotation_speed * scene->animation_speed * time;
+    jupiter.rotation += jupiter.rotation_speed * scene->animation_speed * time;
+    saturn.rotation += saturn.rotation_speed * scene->animation_speed * time;
+    uranus.rotation += uranus.rotation_speed * scene->animation_speed * time;
+    neptune.rotation += neptune.rotation_speed * scene->animation_speed * time;
+    pluto.rotation += pluto.rotation_speed * scene->animation_speed * time;
+    moon.rotation += moon.rotation_speed * scene->animation_speed * time;
+}
+
+void renderBitmapString(float x, float y, float z, void *font, char *string) {
+	char *c;
+	glRasterPos3f(x, y, z);
+	for (c = string; *c != '\0'; c++) {
+		glutBitmapCharacter(font, *c);
+	}
 }

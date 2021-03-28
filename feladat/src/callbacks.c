@@ -23,10 +23,14 @@ void display(){
         draw_planets(&scene);
     glPopMatrix();
 
+    calc_fps();
     glutSwapBuffers();
 }
 
 void reshape(GLsizei width, GLsizei height){
+
+    w = width;
+    h = height;
     if (height == 0)
 		height = 1;
 
@@ -126,6 +130,35 @@ void keyboard_up(unsigned char key, int x, int y)
     glutPostRedisplay();
 }
 
+
+void calc_fps(){
+    frame++;
+
+	time=glutGet(GLUT_ELAPSED_TIME);
+	if (time - timebase > 1000) {
+		sprintf(s,"FPS:%4.2f",
+			frame*1000.0/(time-timebase));
+		timebase = time;
+		frame = 0;
+    }
+    glMatrixMode(GL_PROJECTION);
+
+    glPushMatrix();
+        glLoadIdentity();
+        gluOrtho2D(0, w, h, 0);
+	    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+    glPushMatrix();
+	    glLoadIdentity();
+	    renderBitmapString(5,30,0,GLUT_BITMAP_HELVETICA_18,s);
+	glPopMatrix();
+
+    glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+}
+
 void idle()
 {
     static int last_frame_time = 0;
@@ -138,8 +171,8 @@ void idle()
 
     update_camera(&camera, elapsed_time);
     if(scene.animate){
-        increment_orbit(elapsed_time);
-        increment_rotation(elapsed_time);
+        increment_orbit(&scene, elapsed_time);
+        increment_rotation(&scene, elapsed_time);
     }
 
     glutPostRedisplay();

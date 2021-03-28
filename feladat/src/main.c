@@ -1,5 +1,7 @@
 #include <GL/glut.h>
 #include <stdio.h>
+#include <windows.h>
+#include <MMsystem.h>
 #include "callbacks.h"
 #include "popupmenu.h"
 #include "init.h"
@@ -18,6 +20,7 @@ void set_callbacks(){
 
 int main(int argc, char* argv[]){
 
+
     int window;
 
     glutInit(&argc, argv);
@@ -35,6 +38,7 @@ int main(int argc, char* argv[]){
 
     create_popup_menus();
 
+    PlaySound(TEXT("data/audio/notime.wav"), NULL, SND_ASYNC);
     glutMainLoop();
 
     return 0;

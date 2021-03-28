@@ -5,6 +5,12 @@
 #include "camera.h"
 #include "scene.h"
 
+
+int w, h;
+int frame;
+long time, timebase;
+char s[50];
+
 // camera
 Camera camera;
 
@@ -28,6 +34,9 @@ void keyboard(unsigned char key, int x, int y);
 
 // called after releasing a key
 void keyboard_up(unsigned char key, int x, int y);
+
+// calculates frames per second
+void calc_fps();
 
 // called when there is no other event
 void idle();
