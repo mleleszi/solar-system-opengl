@@ -106,17 +106,16 @@ draw_manual(){
     glPushMatrix();
         glLoadIdentity();
         renderBitmapString(5, 25, 0, GLUT_BITMAP_HELVETICA_18, "USER MANUAL");
-        renderBitmapString(5, 75, 0, GLUT_BITMAP_HELVETICA_18, "Use WASD and the mouse to move around and control the camera");
-        renderBitmapString(5, 100, 0, GLUT_BITMAP_HELVETICA_18, "Use B to start/stop the animation");
-        renderBitmapString(5, 125, 0, GLUT_BITMAP_HELVETICA_18, "Use N to draw the orbits");
-        renderBitmapString(5, 150, 0, GLUT_BITMAP_HELVETICA_18, "Use +/- to adjust the intensity of ambient light");
-        renderBitmapString(5, 175, 0, GLUT_BITMAP_HELVETICA_18, "Press RMB to access the Pop-up menu");
-        renderBitmapString(5, 200, 0, GLUT_BITMAP_HELVETICA_18, "Press ESC to exit the simulation");
-        renderBitmapString(5, 250, 0, GLUT_BITMAP_HELVETICA_18, "PRESS F1 TO CLOSE THE USER MANUAL");
-        renderBitmapString(5, 300, 0, GLUT_BITMAP_HELVETICA_18, "Marcell Leleszi 2021");
-
-
-
+        renderBitmapString(5, 75, 0, GLUT_BITMAP_HELVETICA_18, "Use WASD to move around");
+        renderBitmapString(5, 100, 0, GLUT_BITMAP_HELVETICA_18, "Use SPACE and C to fly up and down");
+        renderBitmapString(5, 125, 0, GLUT_BITMAP_HELVETICA_18, "The direction of the camera can be changed with the mouse while the left mouse button is being held down");
+        renderBitmapString(5, 150, 0, GLUT_BITMAP_HELVETICA_18, "Use B to start/stop the animation");
+        renderBitmapString(5, 175, 0, GLUT_BITMAP_HELVETICA_18, "Use N to draw the orbits");
+        renderBitmapString(5, 200, 0, GLUT_BITMAP_HELVETICA_18, "Use +/- to adjust the intensity of ambient light");
+        renderBitmapString(5, 225, 0, GLUT_BITMAP_HELVETICA_18, "Press RMB to access the Pop-up menu");
+        renderBitmapString(5, 250, 0, GLUT_BITMAP_HELVETICA_18, "Press ESC to exit the simulation");
+        renderBitmapString(5, 300, 0, GLUT_BITMAP_HELVETICA_18, "PRESS F1 TO CLOSE THE USER MANUAL");
+        renderBitmapString(5, 350, 0, GLUT_BITMAP_HELVETICA_18, "Marcell Leleszi 2021");
 	glPopMatrix();
 
     glMatrixMode(GL_PROJECTION);
