@@ -12,9 +12,6 @@ struct {
 
 
 void display(){
-
-
-
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
 
@@ -23,7 +20,10 @@ void display(){
         draw_planets(&scene);
     glPopMatrix();
 
-    calc_fps();
+
+    if(scene.drawManual) draw_manual();
+    else calc_fps();
+
     glutSwapBuffers();
 }
 
@@ -130,11 +130,24 @@ void keyboard_up(unsigned char key, int x, int y)
     glutPostRedisplay();
 }
 
+void specialFunc(int key, int x, int y) {
+	switch (key) {
+	case GLUT_KEY_F1:
+		if (scene.drawManual) {
+			scene.drawManual = 0;
+		}else {
+			scene.drawManual = 1;
+		}
+        break;
+	}
+
+}
+
 
 void calc_fps(){
     frame++;
-
-	time=glutGet(GLUT_ELAPSED_TIME);
+    glBindTexture(NULL, NULL);
+	time = glutGet(GLUT_ELAPSED_TIME);
 	if (time - timebase > 1000) {
 		sprintf(s,"FPS:%4.2f",
 			frame*1000.0/(time-timebase));
@@ -152,6 +165,7 @@ void calc_fps(){
     glPushMatrix();
 	    glLoadIdentity();
 	    renderBitmapString(5,30,0,GLUT_BITMAP_HELVETICA_18,s);
+        renderBitmapString(5,55,0,GLUT_BITMAP_HELVETICA_18,"PRESS F1 TO OPEN USER MANUAL");
 	glPopMatrix();
 
     glMatrixMode(GL_PROJECTION);

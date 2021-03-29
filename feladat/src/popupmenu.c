@@ -47,6 +47,13 @@ void process_audio_menu(int option){
 	}
 }
 
+void process_name_menu(int option){
+	switch(option){
+		case ON: scene.planetNames = 1; break;
+		case OFF: scene.planetNames = 0; break;
+	}
+}
+
 void create_popup_menus(){
 
     animation_menu = glutCreateMenu(process_animation_menu);
@@ -70,12 +77,18 @@ void create_popup_menus(){
     glutAddMenuEntry("Hans Zimmer - S.T.A.Y", 1);
 	glutAddMenuEntry("Turn Off", 2);
 
+	name_menu = glutCreateMenu(process_name_menu);
+    glutAddMenuEntry("Turn On", ON);
+    glutAddMenuEntry("Turn Off", OFF);
+
+
     main_menu = glutCreateMenu(process_main_menu);
 
     glutAddSubMenu("Animation", animation_menu);
 	glutAddSubMenu("Animation Speed", animation_speed_menu);
     glutAddSubMenu("Orbit Trails", orbit_menu);
 	glutAddSubMenu("Audio", audio_menu);
+	glutAddSubMenu("Planet Names", name_menu);
 
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 

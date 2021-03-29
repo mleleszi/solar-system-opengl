@@ -7,7 +7,7 @@
 #define ON 1
 #define OFF 0
 
-int animation_menu, animation_speed_menu, orbit_menu, audio_menu, main_menu;
+int animation_menu, animation_speed_menu, orbit_menu, audio_menu, name_menu, main_menu;
 int menu_flag;
 
 // create pop up menus
@@ -30,6 +30,9 @@ void process_orbit_menu(int option);
 
 // audio menu
 void process_audio_menu(int option);
+
+// planet names menus
+void process_name_menu(int option);
 
 
 

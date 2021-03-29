@@ -35,6 +35,9 @@ void keyboard(unsigned char key, int x, int y);
 // called after releasing a key
 void keyboard_up(unsigned char key, int x, int y);
 
+// called after pressing a special key
+void specialFunc(int key, int x, int y);
+
 // calculates frames per second
 void calc_fps();
 

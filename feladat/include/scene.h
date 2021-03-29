@@ -35,6 +35,8 @@ typedef struct Scene{
     int drawOrbit;
     int animate;
     float animation_speed;
+    int drawManual;
+    int planetNames;
 } Scene;
 
 // init scene by loading models
@@ -45,6 +47,9 @@ void set_lighting(Scene* scene);
 
 // set the current material
 void set_material(const Material* material);
+
+// call to show the manual
+void draw_manual();
 
 // call to draw the planets
 void draw_planets(Scene* scene);
