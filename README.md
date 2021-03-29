@@ -1,18 +1,18 @@
 # Naprendszer modell
 
-Alapvető funkciók:
+Alapvető funkciók:\
 -kamerakezelés: WASD és egér használatával\
--objektumok: a bolygók egy planet.obj, a szaturnusz gyűrűje egy ring.obj fájlokból vannak betöltve
--animáció
--textúrák
--fények: +/- gombbal állíthatóak
--használati útmutató: F1-el
+-objektumok: a bolygók egy planet.obj, a szaturnusz gyűrűje egy ring.obj fájlokból vannak betöltve\
+-animáció\
+-textúrák\
+-fények: +/- gombbal állíthatóak\
+-használati útmutató: F1-el\
 
-Többlet funkciók:
--bonyolultabb animációk: bolygók mozgása(keringés, forgás, döntött tengelyek, plútónak döntött pálya) 
--pop up menu: jobb egérgomb lenyomásával megjelenik egy pop up menu, ahol animáció sebessége állítható, bolygók pályájának kirajzolása ki/be kapcsolható, zene ki/be kapcsolható és váltható, bolygók neve kiírható
--zene: program indulásakor elindul az Interstellár zenéje, ez állitható/megállitható a pop up menübe
--fps számláló és bolygók fölött neveik kiírva
+Többlet funkciók:\
+-bonyolultabb animációk: bolygók mozgása(keringés, forgás, döntött tengelyek, plútónak döntött pálya) \
+-pop up menu: jobb egérgomb lenyomásával megjelenik egy pop up menu, ahol animáció sebessége állítható, bolygók pályájának kirajzolása ki/be kapcsolható, zene ki/be kapcsolható és váltható, bolygók neve kiírható\
+-zene: program indulásakor elindul az Interstellár zenéje, ez állitható/megállitható a pop up menübe\
+-fps számláló és bolygók fölött neveik kiírva\
 
 
 Futtatás:
