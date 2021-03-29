@@ -1,7 +1,7 @@
 # Naprendszer modell
 
 Alapvető funkciók:
--kamerakezelés: WASD és egér használatával \n
+-kamerakezelés: WASD és egér használatával\
 -objektumok: a bolygók egy planet.obj, a szaturnusz gyűrűje egy ring.obj fájlokból vannak betöltve
 -animáció
 -textúrák
