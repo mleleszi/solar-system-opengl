@@ -10,6 +10,7 @@
 
 void init_scene(Scene* scene){
     load_model(&(scene->geoid), "data/models/planet.obj");
+    load_model(&(scene->saturn_ring), "data/models/saturn_ring.obj");
 
     scene->sun_texture_id = load_texture("data/textures/2k_sun.jpg");
 
@@ -247,9 +248,11 @@ void draw_planets(Scene* scene){
         if(scene->planetNames) renderBitmapString(0.2 * saturn.radius, 0.0f, saturn.radius, GLUT_BITMAP_HELVETICA_12  ,"Saturn");
         glRotatef(saturn.axis_tilt, 0.0f, 1.0f, 0.0f);
         glRotatef(saturn.rotation, 0.0f, 0.0f, 1.0f);
-        glScalef(saturn.radius, saturn.radius, saturn.radius);
         glBindTexture(GL_TEXTURE_2D, scene->saturn_texture_id);
+        draw_model(&(scene->saturn_ring));
+        glScalef(saturn.radius, saturn.radius, saturn.radius);
         draw_model(&(scene->geoid));
+
     glPopMatrix();
 
     // Uranus
