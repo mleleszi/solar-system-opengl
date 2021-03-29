@@ -1,1 +1,1 @@
-# Grafika
+# Naprendszer modell
