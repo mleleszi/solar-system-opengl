@@ -28,7 +28,6 @@ typedef struct Scene{
     GLuint mars_texture_id;
     GLuint jupiter_texture_id;
     GLuint saturn_texture_id;
-    GLuint saturn_ring_texture_id;
     GLuint uranus_texture_id;
     GLuint neptune_texture_id;
     GLuint pluto_texture_id;
