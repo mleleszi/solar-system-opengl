@@ -17,8 +17,8 @@ void process_main_menu(int option){
 
 void process_animation_menu(int option){
     switch(option){
-        case ON: scene.animate = 1; break;
-        case OFF: scene.animate = 0; break;
+        case 1: scene.animate = 1; break;
+        case 0: scene.animate = 0; break;
     }
 }
 
@@ -34,8 +34,8 @@ void process_animation_speed_menu(int option){
 
 void process_orbit_menu(int option){
     switch(option){
-        case ON: scene.drawOrbit = 1; break;
-        case OFF: scene.drawOrbit = 0; break;
+        case 1: scene.drawOrbit = 1; break;
+        case 0: scene.drawOrbit = 0; break;
     }
 }
 
@@ -49,16 +49,16 @@ void process_audio_menu(int option){
 
 void process_name_menu(int option){
 	switch(option){
-		case ON: scene.planetNames = 1; break;
-		case OFF: scene.planetNames = 0; break;
+		case 1: scene.planetNames = 1; break;
+		case 0: scene.planetNames = 0; break;
 	}
 }
 
 void create_popup_menus(){
 
     animation_menu = glutCreateMenu(process_animation_menu);
-    glutAddMenuEntry("Turn On", ON);
-    glutAddMenuEntry("Turn Off", OFF);
+    glutAddMenuEntry("Turn On", 1);
+    glutAddMenuEntry("Turn Off", 0);
 
 	animation_speed_menu = glutCreateMenu(process_animation_speed_menu);
 	glutAddMenuEntry("0.2x", 0);
@@ -69,8 +69,8 @@ void create_popup_menus(){
 
 
     orbit_menu = glutCreateMenu(process_orbit_menu);
-    glutAddMenuEntry("Turn On", ON);
-    glutAddMenuEntry("Turn Off", OFF);
+    glutAddMenuEntry("Turn On", 1);
+    glutAddMenuEntry("Turn Off", 0);
 
 	audio_menu = glutCreateMenu(process_audio_menu);
     glutAddMenuEntry("Hans Zimmer - No Time For Caution", 0);
@@ -78,8 +78,8 @@ void create_popup_menus(){
 	glutAddMenuEntry("Turn Off", 2);
 
 	name_menu = glutCreateMenu(process_name_menu);
-    glutAddMenuEntry("Turn On", ON);
-    glutAddMenuEntry("Turn Off", OFF);
+    glutAddMenuEntry("Turn On", 1);
+    glutAddMenuEntry("Turn Off", 0);
 
 
     main_menu = glutCreateMenu(process_main_menu);

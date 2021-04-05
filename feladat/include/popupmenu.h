@@ -4,8 +4,6 @@
 #include "scene.h"
 #include "callbacks.h"
 
-#define ON 1
-#define OFF 0
 
 int animation_menu, animation_speed_menu, orbit_menu, audio_menu, name_menu, main_menu;
 int menu_flag;

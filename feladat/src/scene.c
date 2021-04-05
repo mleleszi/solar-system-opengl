@@ -5,16 +5,38 @@
 #include <obj/draw.h>
 #include "scene.h"
 #include "callbacks.h"
-
+#include "file.h"
 
 
 void init_scene(Scene* scene){
     load_model(&(scene->geoid), "data/models/planet.obj");
     load_model(&(scene->saturn_ring), "data/models/saturn_ring.obj");
 
+    init_textures(scene);
+    init_material(scene);
+    init_planet(scene);
+
+    scene->drawOrbit = 1;
+    scene->animate = 1;
+    scene->animation_speed = 1.0;
+    scene->drawManual = 0;
+    scene->planetNames = 0;
+}
+
+void init_planet(Scene* scene){
+
+    FILE* fp = fopen("data/planet_data.csv", "r");
+        if(fp == 0){
+            printf("Could not open file");
+            exit(1);
+        }
+
+    readFromFile(scene->planets, fp);
+
+}
+
+void init_textures(Scene* scene){
     scene->sun_texture_id = load_texture("data/textures/2k_sun.jpg");
-
-
     scene->mercury_texture_id = load_texture("data/textures/2k_mercury.jpg");
     scene->venus_texture_id = load_texture("data/textures/2k_venus.jpg");
     scene->earth_texture_id = load_texture("data/textures/2k_earth.jpg");
@@ -25,10 +47,10 @@ void init_scene(Scene* scene){
     scene->neptune_texture_id = load_texture("data/textures/2k_neptune.jpg");
     scene->pluto_texture_id = load_texture("data/textures/2k_pluto.jpg");
     scene->moon_texture_id = load_texture("data/textures/2k_moon.jpg");
-
     scene->skybox_texture_id = load_texture("data/textures/skybox.png");
+}
 
-
+void init_material(Scene* scene){
     scene->material.ambient.red = 1.0;
     scene->material.ambient.green = 1.0;
     scene->material.ambient.blue = 1.0;
@@ -46,14 +68,7 @@ void init_scene(Scene* scene){
     scene->ambient.red = 0.4;
     scene->ambient.green = 0.4;
     scene->ambient.blue = 0.4;
-
-    scene->drawOrbit = 1;
-    scene->animate = 1;
-    scene->animation_speed = 1.0;
-    scene->drawManual = 0;
-    scene->planetNames = 0;
 }
-
 void set_lighting(Scene* scene){
 
     float ambient_light[] = { scene->ambient.red, scene->ambient.green, scene->ambient.blue, 1.0f};
@@ -126,18 +141,6 @@ draw_manual(){
 }
 
 
-Planet sun = {6.0f/10, 0.0f/10, 0.0f, 0.0f, 20.0f, 30.0f, 0.0f};
-Planet mercury = {0.4f/10, 8.0f/10, 20.0f, 0.0f, 20.0f, 0.0f, 0.0f};
-Planet venus = {0.95f/10, 16.0f/10, 15.0f, 0.0f, 10.0f, 0.0f, -177.3f};
-Planet earth = {1.0f/10, 24.0f/10, 10.0f, 0.0f, 100.0f, 0.0f, -23.4f};
-Planet mars = {0.65f/10, 30.0f/10, 5.0f, 0.0f, 100.0f, 0.0f, -25.2f};
-Planet jupiter = {3.0f/10, 38.0f/10, 4.0f, 0.0f, 400.0f, 0.0f, -3.1f};
-Planet saturn = {2.5f/10, 50.0f/10, 3.0f, 0.0f, 400.0f, 0.0f, -26.7f};
-Planet uranus = {1.9f/10, 60.0f/10, 2.0f, 0.0f, 600.0f, 0.0f, -97.8f};
-Planet neptune = {1.8f/10, 70.0f/10, 1.0f, 0.0f, 550.0f, 0.0f, -28.3f};
-Planet pluto = {0.3f/10, 80.0f/10, 0.75f, 0.0f, 550.0f, 0.0f, -120.f};
-Planet moon = {0.3f/10, 2.0f/10, 20.0f, 0.0f, 16.0f, 0.0f, 0.0f};
-
 void draw_planets(Scene* scene){
     set_material(&(scene->material));
     set_lighting(scene);
@@ -152,130 +155,129 @@ void draw_planets(Scene* scene){
 
     // Sun
     glPushMatrix();
-        if(scene->planetNames) renderBitmapString(0.2 * sun.radius, 0.0f, sun.radius, GLUT_BITMAP_HELVETICA_12  ,"Sun");
+        if(scene->planetNames) renderBitmapString(0.2 * scene->planets[0].radius, 0.0f, scene->planets[0].radius, GLUT_BITMAP_HELVETICA_12  ,"Sun");
         glBindTexture(GL_TEXTURE_2D, scene->sun_texture_id);
-        glScalef(sun.radius, sun.radius, sun.radius);
-        glRotatef(sun.rotation, 0.0f, 0.0f, 1.0f);
+        glScalef(scene->planets[0].radius, scene->planets[0].radius, scene->planets[0].radius);
+        glRotatef(scene->planets[0].rotation, 0.0f, 0.0f, 1.0f);
         draw_model(&(scene->geoid));
     glPopMatrix();
 
     // Mercury
     glPushMatrix();
-        if(scene->drawOrbit) draw_orbit_trail(mercury.distance);
-        glRotatef(mercury.orbit, 0.0f, 0.0f, 1.0f);
-        glTranslatef(mercury.distance, 0.0f, 0.0f);
-        if(scene->planetNames) renderBitmapString(0.2 * mercury.radius, 0.0f, mercury.radius, GLUT_BITMAP_HELVETICA_12  ,"Mercury");
-        glRotatef(mercury.axis_tilt, 0.0f, 1.0f, 0.0f);
-        glRotatef(mercury.rotation, 0.0f, 0.0f, 1.0f);
-        glScalef(mercury.radius, mercury.radius, mercury.radius);
+        if(scene->drawOrbit) draw_orbit_trail(scene->planets[1].distance);
+        glRotatef(scene->planets[1].orbit, 0.0f, 0.0f, 1.0f);
+        glTranslatef(scene->planets[1].distance, 0.0f, 0.0f);
+        if(scene->planetNames) renderBitmapString(0.2 * scene->planets[1].radius, 0.0f, scene->planets[1].radius, GLUT_BITMAP_HELVETICA_12  ,"Mercury");
+        glRotatef(scene->planets[1].axis_tilt, 0.0f, 1.0f, 0.0f);
+        glRotatef(scene->planets[1].rotation, 0.0f, 0.0f, 1.0f);
+        glScalef(scene->planets[1].radius, scene->planets[1].radius, scene->planets[1].radius);
         glBindTexture(GL_TEXTURE_2D, scene->mercury_texture_id);
         draw_model(&(scene->geoid));
-
     glPopMatrix();
 
     // Venus
     glPushMatrix();
-        if(scene->drawOrbit) draw_orbit_trail(venus.distance);
-        glRotatef(venus.orbit, 0.0f, 0.0f, 1.0f);
-        glTranslatef(venus.distance, 0.0f, 0.0f);
-        if(scene->planetNames) renderBitmapString(0.2 * venus.radius, 0.0f, venus.radius, GLUT_BITMAP_HELVETICA_12  ,"Venus");
-        glRotatef(venus.axis_tilt, 0.0f, 1.0f, 0.0f);
-        glRotatef(venus.rotation, 0.0f, 0.0f, 1.0f);
-        glScalef(venus.radius, venus.radius, venus.radius);
+        if(scene->drawOrbit) draw_orbit_trail(scene->planets[2].distance);
+        glRotatef(scene->planets[2].orbit, 0.0f, 0.0f, 1.0f);
+        glTranslatef(scene->planets[2].distance, 0.0f, 0.0f);
+        if(scene->planetNames) renderBitmapString(0.2 * scene->planets[2].radius, 0.0f, scene->planets[2].radius, GLUT_BITMAP_HELVETICA_12  ,"Venus");
+        glRotatef(scene->planets[2].axis_tilt, 0.0f, 1.0f, 0.0f);
+        glRotatef(scene->planets[2].rotation, 0.0f, 0.0f, 1.0f);
+        glScalef(scene->planets[2].radius, scene->planets[2].radius, scene->planets[2].radius);
         glBindTexture(GL_TEXTURE_2D, scene->venus_texture_id);
         draw_model(&(scene->geoid));
     glPopMatrix();
 
     // Earth
     glPushMatrix();
-        if(scene->drawOrbit) draw_orbit_trail(earth.distance);
-        glRotatef(earth.orbit, 0.0f, 0.0f, 1.0f);
-        glTranslatef(earth.distance, 0.0f, 0.0f);
-        if(scene->planetNames) renderBitmapString(0.2 * earth.radius, 0.0f, earth.radius, GLUT_BITMAP_HELVETICA_12  ,"Earth");
-        glRotatef(earth.axis_tilt, 0.0f, 1.0f, 0.0f);
-        glRotatef(earth.rotation, 0.0f, 0.0f, 1.0f);
-        glScalef(earth.radius, earth.radius, earth.radius);
+        if(scene->drawOrbit) draw_orbit_trail(scene->planets[3].distance);
+        glRotatef(scene->planets[3].orbit, 0.0f, 0.0f, 1.0f);
+        glTranslatef(scene->planets[3].distance, 0.0f, 0.0f);
+        if(scene->planetNames) renderBitmapString(0.2 * scene->planets[3].radius, 0.0f, scene->planets[3].radius, GLUT_BITMAP_HELVETICA_12  ,"Earth");
+        glRotatef(scene->planets[3].axis_tilt, 0.0f, 1.0f, 0.0f);
+        glRotatef(scene->planets[3].rotation, 0.0f, 0.0f, 1.0f);
+        glScalef(scene->planets[3].radius, scene->planets[3].radius, scene->planets[3].radius);
         glBindTexture(GL_TEXTURE_2D, scene->earth_texture_id);
         draw_model(&(scene->geoid));
     glPopMatrix();
 
     // Moon
     glPushMatrix();
-        glRotatef(earth.orbit, 0.0f, 0.0f, 1.0f);
-        glTranslatef(earth.distance, 0.0f, 0.0f);
+        glRotatef(scene->planets[3].orbit, 0.0f, 0.0f, 1.0f);
+        glTranslatef(scene->planets[3].distance, 0.0f, 0.0f);
         glRotatef(5.0f, 0.0f, 1.0f, 0.0f);
-        if(scene->drawOrbit) draw_orbit_trail(moon.distance);
-        glRotatef(moon.orbit, 0.0f, 0.0f, 1.0f);
-        glTranslatef(moon.distance, 0.0f, 0.0f);
-        glRotatef(moon.rotation, 0.0f, 0.0f, 1.0f);
-        glScalef(moon.radius, moon.radius, moon.radius);
+        if(scene->drawOrbit) draw_orbit_trail(scene->planets[10].distance);
+        glRotatef(scene->planets[10].orbit, 0.0f, 0.0f, 1.0f);
+        glTranslatef(scene->planets[10].distance, 0.0f, 0.0f);
+        glRotatef(scene->planets[10].rotation, 0.0f, 0.0f, 1.0f);
+        glScalef(scene->planets[10].radius, scene->planets[10].radius, scene->planets[10].radius);
         glBindTexture(GL_TEXTURE_2D, scene->moon_texture_id);
         draw_model(&(scene->geoid));
     glPopMatrix();
 
     // Mars
     glPushMatrix();
-        if(scene->drawOrbit) draw_orbit_trail(mars.distance);
-        glRotatef(mars.orbit, 0.0f, 0.0f, 1.0f);
-        glTranslatef(mars.distance, 0.0f, 0.0f);
-        if(scene->planetNames) renderBitmapString(0.2 * mars.radius, 0.0f, mars.radius, GLUT_BITMAP_HELVETICA_12  ,"Mars");
-        glRotatef(mars.axis_tilt, 0.0f, 1.0f, 0.0f);
-        glRotatef(mars.rotation, 0.0f, 0.0f, 1.0f);
-        glScalef(mars.radius, mars.radius, mars.radius);
+        if(scene->drawOrbit) draw_orbit_trail(scene->planets[4].distance);
+        glRotatef(scene->planets[4].orbit, 0.0f, 0.0f, 1.0f);
+        glTranslatef(scene->planets[4].distance, 0.0f, 0.0f);
+        if(scene->planetNames) renderBitmapString(0.2 * scene->planets[4].radius, 0.0f, scene->planets[4].radius, GLUT_BITMAP_HELVETICA_12  ,"Mars");
+        glRotatef(scene->planets[4].axis_tilt, 0.0f, 1.0f, 0.0f);
+        glRotatef(scene->planets[4].rotation, 0.0f, 0.0f, 1.0f);
+        glScalef(scene->planets[4].radius, scene->planets[4].radius, scene->planets[4].radius);
         glBindTexture(GL_TEXTURE_2D, scene->mars_texture_id);
         draw_model(&(scene->geoid));
     glPopMatrix();
 
     // Jupiter
     glPushMatrix();
-        if(scene->drawOrbit) draw_orbit_trail(jupiter.distance);
-        glRotatef(jupiter.orbit, 0.0f, 0.0f, 1.0f);
-        glTranslatef(jupiter.distance, 0.0f, 0.0f);
-        if(scene->planetNames) renderBitmapString(0.2 * jupiter.radius, 0.0f, jupiter.radius, GLUT_BITMAP_HELVETICA_12  ,"Jupiter");
-        glRotatef(jupiter.axis_tilt, 0.0f, 1.0f, 0.0f);
-        glRotatef(jupiter.rotation, 0.0f, 0.0f, 1.0f);
-        glScalef(jupiter.radius, jupiter.radius, jupiter.radius);
+        if(scene->drawOrbit) draw_orbit_trail(scene->planets[5].distance);
+        glRotatef(scene->planets[5].orbit, 0.0f, 0.0f, 1.0f);
+        glTranslatef(scene->planets[5].distance, 0.0f, 0.0f);
+        if(scene->planetNames) renderBitmapString(0.2 * scene->planets[5].radius, 0.0f, scene->planets[5].radius, GLUT_BITMAP_HELVETICA_12  ,"Jupiter");
+        glRotatef(scene->planets[5].axis_tilt, 0.0f, 1.0f, 0.0f);
+        glRotatef(scene->planets[5].rotation, 0.0f, 0.0f, 1.0f);
+        glScalef(scene->planets[5].radius, scene->planets[5].radius, scene->planets[5].radius);
         glBindTexture(GL_TEXTURE_2D, scene->jupiter_texture_id);
         draw_model(&(scene->geoid));
     glPopMatrix();
 
     // Saturn
     glPushMatrix();
-        if(scene->drawOrbit) draw_orbit_trail(saturn.distance);
-        glRotatef(saturn.orbit, 0.0f, 0.0f, 1.0f);
-        glTranslatef(saturn.distance, 0.0f, 0.0f);
-        if(scene->planetNames) renderBitmapString(0.2 * saturn.radius, 0.0f, saturn.radius, GLUT_BITMAP_HELVETICA_12  ,"Saturn");
-        glRotatef(saturn.axis_tilt, 0.0f, 1.0f, 0.0f);
-        glRotatef(saturn.rotation, 0.0f, 0.0f, 1.0f);
+        if(scene->drawOrbit) draw_orbit_trail(scene->planets[6].distance);
+        glRotatef(scene->planets[6].orbit, 0.0f, 0.0f, 1.0f);
+        glTranslatef(scene->planets[6].distance, 0.0f, 0.0f);
+        if(scene->planetNames) renderBitmapString(0.2 * scene->planets[6].radius, 0.0f, scene->planets[6].radius, GLUT_BITMAP_HELVETICA_12  ,"Saturn");
+        glRotatef(scene->planets[6].axis_tilt, 0.0f, 1.0f, 0.0f);
+        glRotatef(scene->planets[6].rotation, 0.0f, 0.0f, 1.0f);
         glBindTexture(GL_TEXTURE_2D, scene->saturn_texture_id);
         draw_model(&(scene->saturn_ring));
-        glScalef(saturn.radius, saturn.radius, saturn.radius);
+        glScalef(scene->planets[6].radius, scene->planets[6].radius, scene->planets[6].radius);
         draw_model(&(scene->geoid));
 
     glPopMatrix();
 
     // Uranus
     glPushMatrix();
-        if(scene->drawOrbit) draw_orbit_trail(uranus.distance);
-        glRotatef(uranus.orbit, 0.0f, 0.0f, 1.0f);
-        glTranslatef(uranus.distance, 0.0f, 0.0f);
-        if(scene->planetNames) renderBitmapString(0.2 * uranus.radius, 0.0f, uranus.radius, GLUT_BITMAP_HELVETICA_12  ,"Uranus");
-        glRotatef(uranus.axis_tilt, 0.0f, 1.0f, 0.0f);
-        glRotatef(uranus.rotation, 0.0f, 0.0f, 1.0f);
-        glScalef(uranus.radius, uranus.radius, uranus.radius);
+        if(scene->drawOrbit) draw_orbit_trail(scene->planets[7].distance);
+        glRotatef(scene->planets[7].orbit, 0.0f, 0.0f, 1.0f);
+        glTranslatef(scene->planets[7].distance, 0.0f, 0.0f);
+        if(scene->planetNames) renderBitmapString(0.2 * scene->planets[7].radius, 0.0f, scene->planets[7].radius, GLUT_BITMAP_HELVETICA_12  ,"Uranus");
+        glRotatef(scene->planets[7].axis_tilt, 0.0f, 1.0f, 0.0f);
+        glRotatef(scene->planets[7].rotation, 0.0f, 0.0f, 1.0f);
+        glScalef(scene->planets[7].radius, scene->planets[7].radius, scene->planets[7].radius);
         glBindTexture(GL_TEXTURE_2D, scene->uranus_texture_id);
         draw_model(&(scene->geoid));
     glPopMatrix();
 
     // Neptune
     glPushMatrix();
-        if(scene->drawOrbit) draw_orbit_trail(neptune.distance);
-        glRotatef(neptune.orbit, 0.0f, 0.0f, 1.0f);
-        glTranslatef(neptune.distance, 0.0f, 0.0f);
-        if(scene->planetNames) renderBitmapString(0.2 * neptune.radius, 0.0f, neptune.radius, GLUT_BITMAP_HELVETICA_12  ,"Neptune");
-        glRotatef(neptune.axis_tilt, 0.0f, 1.0f, 0.0f);
-        glRotatef(uranus.rotation, 0.0f, 0.0f, 1.0f);
-        glScalef(neptune.radius, neptune.radius, neptune.radius);
+        if(scene->drawOrbit) draw_orbit_trail(scene->planets[8].distance);
+        glRotatef(scene->planets[8].orbit, 0.0f, 0.0f, 1.0f);
+        glTranslatef(scene->planets[8].distance, 0.0f, 0.0f);
+        if(scene->planetNames) renderBitmapString(0.2 * scene->planets[8].radius, 0.0f, scene->planets[8].radius, GLUT_BITMAP_HELVETICA_12  ,"Neptune");
+        glRotatef(scene->planets[8].axis_tilt, 0.0f, 1.0f, 0.0f);
+        glRotatef(scene->planets[8].rotation, 0.0f, 0.0f, 1.0f);
+        glScalef(scene->planets[8].radius, scene->planets[8].radius, scene->planets[8].radius);
         glBindTexture(GL_TEXTURE_2D, scene->neptune_texture_id);
         draw_model(&(scene->geoid));
     glPopMatrix();
@@ -283,13 +285,13 @@ void draw_planets(Scene* scene){
     // Pluto
     glPushMatrix();
         glRotatef(17.0f, 0.0f, 1.0f, 0.0f);
-        if(scene->drawOrbit) draw_orbit_trail(pluto.distance);
-        glRotatef(pluto.orbit, 0.0f, 0.0f, 1.0f);
-        glTranslatef(pluto.distance, 0.0f, 0.0f);
-        if(scene->planetNames) renderBitmapString(0.2 * neptune.radius, 0.0f, pluto.radius, GLUT_BITMAP_HELVETICA_12  ,"Pluto");
-        glRotatef(pluto.axis_tilt, 0.0f, 1.0f, 0.0f);
-        glRotatef(pluto.rotation, 0.0f, 0.0f, 1.0f);
-        glScalef(pluto.radius, pluto.radius, pluto.radius);
+        if(scene->drawOrbit) draw_orbit_trail(scene->planets[9].distance);
+        glRotatef(scene->planets[9].orbit, 0.0f, 0.0f, 1.0f);
+        glTranslatef(scene->planets[9].distance, 0.0f, 0.0f);
+        if(scene->planetNames) renderBitmapString(0.2 * scene->planets[9].radius, 0.0f, scene->planets[9].radius, GLUT_BITMAP_HELVETICA_12  ,"Pluto");
+        glRotatef(scene->planets[9].axis_tilt, 0.0f, 1.0f, 0.0f);
+        glRotatef(scene->planets[9].rotation, 0.0f, 0.0f, 1.0f);
+        glScalef(scene->planets[9].radius, scene->planets[9].radius, scene->planets[9].radius);
         glBindTexture(GL_TEXTURE_2D, scene->pluto_texture_id);
         draw_model(&(scene->geoid));
     glPopMatrix();
@@ -297,9 +299,6 @@ void draw_planets(Scene* scene){
 
     glPopMatrix();
 }
-
-
-
 
 void draw_orbit_trail(float radius){
     glBindTexture(GL_TEXTURE_2D, NULL);
@@ -312,33 +311,16 @@ void draw_orbit_trail(float radius){
     glEnd();
 }
 
-
-
 void increment_orbit(Scene* scene, double time){
-    mercury.orbit += mercury.orbit_speed * scene->animation_speed * time;
-    venus.orbit += venus.orbit_speed * scene->animation_speed * time;
-    earth.orbit += earth.orbit_speed * scene->animation_speed * time;
-    mars.orbit += mars.orbit_speed * scene->animation_speed * time;
-    jupiter.orbit += jupiter.orbit_speed * scene->animation_speed * time;
-    saturn.orbit += saturn.orbit_speed * scene->animation_speed * time;
-    uranus.orbit += uranus.orbit_speed * scene->animation_speed * time;
-    neptune.orbit += neptune.orbit_speed * scene->animation_speed * time;
-    pluto.orbit += pluto.orbit_speed * scene->animation_speed * time;
-    moon.orbit += moon.orbit_speed * scene->animation_speed * time;
+    int i;
+    for(i = 0; i < 11; i++)
+        scene->planets[i].orbit += scene->planets[i].orbit_speed * scene->animation_speed * time;
 }
 
 void increment_rotation(Scene* scene, double time){
-    sun.rotation += sun.rotation_speed * scene->animation_speed * time;
-    mercury.rotation += mercury.rotation_speed * scene->animation_speed * time;
-    venus.rotation += venus.rotation_speed * scene->animation_speed * time;
-    earth.rotation += earth.rotation_speed * scene->animation_speed * time;
-    mars.rotation += mars.rotation_speed * scene->animation_speed * time;
-    jupiter.rotation += jupiter.rotation_speed * scene->animation_speed * time;
-    saturn.rotation += saturn.rotation_speed * scene->animation_speed * time;
-    uranus.rotation += uranus.rotation_speed * scene->animation_speed * time;
-    neptune.rotation += neptune.rotation_speed * scene->animation_speed * time;
-    pluto.rotation += pluto.rotation_speed * scene->animation_speed * time;
-    moon.rotation += moon.rotation_speed * scene->animation_speed * time;
+    int i;
+    for(i = 0; i < 11; i++)
+        scene->planets[i].rotation += scene->planets[i].rotation_speed * scene->animation_speed * time;
 }
 
 void renderBitmapString(float x, float y, float z, void *font, char *string) {

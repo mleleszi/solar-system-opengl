@@ -39,10 +39,15 @@ typedef struct Scene{
     float animation_speed;
     int drawManual;
     int planetNames;
+
+    Planet planets[11];
 } Scene;
 
 // init scene by loading models
 void init_scene(Scene* scene);
+
+// init planets
+void init_planet(Scene* scene);
 
 // set the lighting of the scene
 void set_lighting(Scene* scene);
