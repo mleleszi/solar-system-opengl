@@ -13,7 +13,7 @@ Többlet funkciók:\
 -pop up menu: jobb egérgomb lenyomásával megjelenik egy pop up menu, ahol animáció sebessége állítható, bolygók pályájának kirajzolása ki/be kapcsolható, zene ki/be kapcsolható és váltható, bolygók neve kiírható\
 -zene: program indulásakor elindul az Interstellár zenéje, ez állitható/megállitható a pop up menübe\
 -fps számláló és bolygók fölött neveik kiírva\
--fájlból beolvasás: bolygók adatai csv fájlól vannak beolvasva
+-fájlból beolvasás: bolygók adatai csv fájból vannak beolvasva
 
 
 Futtatás:
@@ -30,5 +30,7 @@ Megjegyzés: Jelenlegi verzió zenék miatt csak windowson működik.
 
 
 Leleszi Marcell
+
+Grafika beadandó
 
 
